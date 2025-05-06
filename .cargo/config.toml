@@ -1,5 +1,5 @@
 [build]
-target = "x86_64-study_os.json"
+target = "target.json"
 
 [unstable]
 build-std=["core"]
