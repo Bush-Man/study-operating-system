@@ -1,26 +1,28 @@
 #!/usr/bin/env bash
-export RUST_TARGET_PATH=$(pwd)
+set -e  #Exit immediately if a command exits with a non-zero status
+set -u  #Treat unset variables as an error when substituting
+set -o pipefail  #The return value of a pipeline is the status of the last command to exit with a non-zero status
+set -x  #Print commands and their arguments
 
-# Build the Rust kernel with Cargo
+
+# Compile assembly boot file
+i686-elf-as src/boot.s -o boot.o
+
+# Build Rust kernel
 cargo build --release
 
-# Copy the Cargo-built binary
-cp target/i686-elf-unknown-none/release/studyos kernel.bin
+# Link objects using the proper linker script
+i686-elf-ld -T linker.ld -o kernel.bin boot.o target/i686-elf-unknown-none/release/libstudyos.a
 
-# Create ISO structure
+# Create ISO
 mkdir -p isodir/boot/grub
 cp kernel.bin isodir/boot/
-
-# Create GRUB config
 cat > isodir/boot/grub/grub.cfg << EOF
-menuentry "Rust OS" {
+menuentry "STUDY OS" {
     multiboot /boot/kernel.bin
     boot
 }
 EOF
 
-# Build ISO
-grub-mkrescue -o os.iso isodir || exit 1
-
-# Run in QEMU
+grub-mkrescue -o os.iso isodir
 qemu-system-i386 -cdrom os.iso
