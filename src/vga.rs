@@ -24,4 +24,20 @@ fn create_color_code(fg: VgaColor, bg: VgaColor) -> u8 {
     return (bg as u8) << 4 | (fg as u8);
 }
 
+struct VgaWriter{
+    row: usize,
+    column: usize,
+    color_code: u8,
+}
+
+impl VgaWriter{
+    fn new()->Self{
+        VgaWriter{
+            row:0,
+            col:0,
+            color_code: create_color_code(VgaColor::White, VgaColor::Black),
+        }
+    }
+    
+}
 
