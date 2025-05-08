@@ -1,7 +1,9 @@
+use core::ptr::write_volatile;
+
 
 const VGA_BUFFER_WIDTH: usize = 80;
 const VGA_BUFFER_HEIGHT: usize = 25;     
-const VGA_BUFFER:*mut u16 = 0xb8000 as *mut u16;
+const VGA_BUFFER_BASE_ADDRESS:*mut u16 = 0xb8000 as *mut u16;
 /// repr(u8) is used to ensure that the enum fields are represented as a single byte.
 /// VGA color codes are 8-bit values.
 #[repr(u8)]
@@ -49,6 +51,7 @@ impl VgaWriter{
             color_code: create_color_code(VgaColor::White, VgaColor::Black),
         }
     }
+    // Write a character to the VGA buffer
    pub fn write_char(&mut self,char:u8){
         match char{
             b'\n' =>{
@@ -59,24 +62,44 @@ impl VgaWriter{
             },
             _ =>{
               unsafe{
-                let index = self.row * VGA_BUFFER_WIDTH + self.column;
-                let vga_buffer = VGA_BUFFER.offset(index as isize);
-                *vga_buffer = ((self.color_code as u16) << 8) | char as u16;
-                self.column += 1;
                 if self.column >= VGA_BUFFER_WIDTH{
                     self.column = 0;
                     self.row +=1;
-
+                    
                 }
-
+                let offset = (self.row * VGA_BUFFER_WIDTH + self.column) as isize;
+                let ascii_char = ((self.color_code as u16) << 8) | char as u16;
+                let position = VGA_BUFFER_BASE_ADDRESS.offset(offset);
+                //TODO: Check if the position is valid before writing
+            
+                    write_volatile(position, ascii_char);
+                
+                
+                self.column += 1;
                 
               }
             }
         }
 
-    }
-    fn scroll_up(&mut self){
 
     }
+
+    // Write a string to the VGA buffer
+    pub fn write_string(&mut self,string:&str){
+
+        for byte in string.bytes(){
+            match byte{
+                0x20..=0x7e => self.write_char(byte),
+                _ => self.write_char(0xFF),
+            }
+        }
+
+    }
+    // Clear screen
+    pub fn scroll_up(&mut self){
+
+    }
+
+    
     
 }

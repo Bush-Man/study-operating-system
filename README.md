@@ -1,4 +1,4 @@
-| Topic         | Link                                        |
-| ------------- | ------------------------------------------- |
-| VGA Text Mode | https://en.wikipedia.org/wiki/VGA_text_mode |
-|               |                                             |
+| Topic                        | Link                                                                                                                                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| VGA Text Mode                | https://en.wikipedia.org/wiki/VGA_text_mode<br />https://os.phil-opp.com/vga-text-mode/<br />https://wiki.osdev.org/Text_UI<br />https://en.wikipedia.org/wiki/Text_mode                    |
+| ASCII - Non Ascii characters | https://en.wikipedia.org/wiki/ASCII<br />https://www.seozoom.com/non-ascii-characters-special-characters<br />https://www.ascii-code.com/<br />https://theasciicode.com.ar/#google_vignette |
