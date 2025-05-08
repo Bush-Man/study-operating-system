@@ -56,7 +56,7 @@ impl VgaWriter{
         match char{
             b'\n' =>{
                 if self.row >= VGA_BUFFER_HEIGHT || self.column >= VGA_BUFFER_WIDTH {
-                    self.scroll_up();
+                    self.new_line();
                 }
                 
             },
@@ -116,6 +116,8 @@ impl VgaWriter{
         }
 
     }
+
+    // Scroll up after reaching the bottom of the screen
     pub fn scroll_up(&mut self){
         if self.row >= VGA_BUFFER_HEIGHT{
             for row in 1..VGA_BUFFER_HEIGHT{
@@ -134,6 +136,15 @@ impl VgaWriter{
             }
         }
 
+    }
+
+    // Creates new line
+    fn new_line(&mut self)  {
+        if self.row >= VGA_BUFFER_HEIGHT {
+            self.scroll_up();
+        }
+        self.column = 0;
+        self.row += 1;
     }
 
     
