@@ -85,7 +85,7 @@ impl VgaWriter{
     }
 
     // Write a string to the VGA buffer
-    pub fn write_string(&mut self,string:&str){
+    pub fn write_str(&mut self,string:&str){
 
         for byte in string.bytes(){
             match byte{
@@ -95,7 +95,27 @@ impl VgaWriter{
         }
 
     }
-    // Clear screen
+    // Clear row
+    pub fn clear_row(&mut self,row:usize){
+        if row >= VGA_BUFFER_HEIGHT{
+            return;
+        }
+        
+        for column in 0..VGA_BUFFER_WIDTH{
+         let offset = row * VGA_BUFFER_WIDTH + column;
+         let position = unsafe {VGA_BUFFER_BASE_ADDRESS.offset(offset as isize)};
+         let blank_char = b' ';
+         let blank_color = create_color_code(VgaColor::Black, VgaColor::Black);
+         let blank = ((blank_color as u16) << 8 )| blank_char as u16;
+         unsafe{
+
+             write_volatile(position, blank);
+            }
+       
+        
+        }
+
+    }
     pub fn scroll_up(&mut self){
 
     }
