@@ -1,4 +1,4 @@
-use core::ptr::write_volatile;
+use core::ptr::{read_volatile, write_volatile};
 
 
 const VGA_BUFFER_WIDTH: usize = 80;
@@ -117,6 +117,22 @@ impl VgaWriter{
 
     }
     pub fn scroll_up(&mut self){
+        if self.row >= VGA_BUFFER_HEIGHT{
+            for row in 1..VGA_BUFFER_HEIGHT{
+                for col in 0..VGA_BUFFER_WIDTH{
+                    let current_offset = row * VGA_BUFFER_WIDTH + col;
+                    let current_position = unsafe{VGA_BUFFER_BASE_ADDRESS.offset(current_offset as isize)};
+                    let prev_offset = (row-1)*VGA_BUFFER_WIDTH + col;
+                    let prev_position = unsafe{VGA_BUFFER_BASE_ADDRESS.offset(prev_offset as isize)};
+
+                    unsafe{
+                        let current_char = read_volatile(current_position);
+                        write_volatile(prev_position, current_char);
+                    }
+
+                }
+            }
+        }
 
     }
 
