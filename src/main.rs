@@ -1,9 +1,11 @@
 #![no_std]
 #![no_main]
 
-
+mod vga;
 
 use core::panic::PanicInfo;
+
+use vga::writter::VgaWriter;
 
 
 #[panic_handler]
@@ -16,14 +18,9 @@ static HELLO:&[u8] = b"Hello world";
 
 #[no_mangle]
 pub extern "C" fn kernel_main()->!{
-    let vga_buffer = 0xb8000 as *mut u8;
-    unsafe{
-
-        for(i,&byte) in HELLO.iter().enumerate(){
-            *vga_buffer.offset(i as isize *2 )= byte;
-            *vga_buffer.offset(i as isize *2 + 1 )= 0xb;
-            
-        }
+    let mut vga = VgaWriter::new();
+    for &byte in HELLO{
+        vga.write_char(byte);
     }
 
     loop{}
