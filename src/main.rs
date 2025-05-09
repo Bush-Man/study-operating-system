@@ -6,6 +6,7 @@ mod vga;
 use core::panic::PanicInfo;
 
 use vga::writter::VgaWriter;
+use core::fmt::Write;
 
 static UPPERCASE: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static LOWERCASE: &str = "abcdefghijklmnopqrstuvwxyz";
@@ -24,15 +25,12 @@ fn panic_handler(_info:&PanicInfo)->!{
 
 #[no_mangle]
 pub extern "C" fn kernel_main()->!{
-    let mut vga = VgaWriter::new();
-    vga.write_str(FLOATS);
-    vga.write_str(FLOATS);
-    vga.write_str(FLOATS);
-    vga.clear_row(0);
-    vga.write_str(FLOATS);
-    vga.write_str(FLOATS);
-    vga.write_str(FLOATS);
-   
+    let mut vga_writer = VgaWriter::new();
+    
+    // write!(vga_writer, "The numbers are {} and {}", 42, 1.0/3.0).unwrap();
+    // write!(vga_writer,"{}", UPPERCASE).unwrap();
+    write!(vga_writer,"{}", WORLD).unwrap();
+
     loop{}
 }
 

@@ -85,7 +85,7 @@ impl VgaWriter{
     }
 
     // Write a string to the VGA buffer
-    pub fn write_str(&mut self,string:&str){
+    pub fn write_string(&mut self,string:&str){
 
         for byte in string.bytes(){
             match byte{
@@ -93,8 +93,10 @@ impl VgaWriter{
                 _ => self.write_char(0xFF),
             }
         }
+        
 
     }
+
     // Clear row
     pub fn clear_row(&mut self,row:usize){
         if row >= VGA_BUFFER_HEIGHT{
@@ -147,6 +149,14 @@ impl VgaWriter{
         self.row += 1;
     }
 
+
+
+}
     
-    
+
+impl core::fmt::Write for VgaWriter{
+    fn write_str(&mut self, s: &str) -> core::fmt::Result {
+        self.write_string(s);
+        Ok(())
+    }
 }
