@@ -8,13 +8,9 @@ use core::panic::PanicInfo;
 use vga::writter::VgaWriter;
 use core::fmt::Write;
 
-static UPPERCASE: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static LOWERCASE: &str = "abcdefghijklmnopqrstuvwxyz";
-static NUMBERS: &str = "0123456789";
-static SYMBOLS: &str = "!@#$%^&*()_+-=[]{}|;:,.<>?/~\n";
-static WHITESPACE: &str = " ";
-static CONTROL: &str = "\t\r\n";
-static FLOATS: &str = "3.14 -0.001 42.0\n";
+const MULTIBOOT_MAGIC_NUMBER: u32 = 0x2BADB002;
+
+
 static WORLD:&str = "Wörld!";
 
 #[panic_handler]
@@ -24,12 +20,19 @@ fn panic_handler(_info:&PanicInfo)->!{
 
 
 #[no_mangle]
-pub extern "C" fn kernel_main()->!{
+pub extern "C" fn kernel_main(multiboot_magic: u32, multiboot_info_ptr: u32)->!{
+
+
+    if MULTIBOOT_MAGIC_NUMBER != multiboot_magic{
+        panic!("Invalid Multiboot Magic Number");
+    }
     let mut vga_writer = VgaWriter::new();
+
+
     
     // write!(vga_writer, "The numbers are {} and {}", 42, 1.0/3.0).unwrap();
     // write!(vga_writer,"{}", UPPERCASE).unwrap();
-    write!(vga_writer,"{}", WORLD).unwrap();
+    write!(vga_writer,"{:#x} Magic Number",multiboot_magic).unwrap();
 
     loop{}
 }
