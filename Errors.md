@@ -28,6 +28,15 @@ must be enabled to ensure that the ABI of the current target can be implemented 
 
 error: data-layout for target `x86_64-study_os-9146196472706914219`, `e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128`, differs from LLVM target's `x86_64-unknown-none` default layout, `e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128`
 
-4.
+Error 4:
 
 grub-mkrescue: error: xorriso not found.
+
+Error 5:
+
+use of mutable static is unsafe and requires unsafe function or block
+mutable statics can be mutated by multiple threads: aliasing violations or data races will cause undefined behaviorrustc[Click for full compiler diagnostic](rust-analyzer-diagnostics-view:/diagnostic%20message%20[5]?5#file:///home/bushman/projects/studyos/src/vga/global_writer.rs)[main.rs(33, 5): ]()Error originated from macro call here
+
+```
+ crate::vga::global_writer::GLOBAL_WRITER.write(format_args!(crate::vga::globalwriter::GLOBALWRITER.write(formatargs!(($arg)*));
+```

@@ -37,14 +37,13 @@ pub struct VgaWriter{
     color_code: u8,
 }
 
-
-fn create_color_code(fg: VgaColor, bg: VgaColor) -> u8 {
+const fn create_color_code(fg: VgaColor, bg: VgaColor) -> u8 {
     return (bg as u8) << 4 | (fg as u8);
 }
 
 
 impl VgaWriter{
-    pub fn new()->Self{
+    pub const fn new()->Self{
         VgaWriter{
             row:0,
             column:0,
@@ -55,9 +54,9 @@ impl VgaWriter{
    pub fn write_char(&mut self,char:u8){
         match char{
             b'\n' =>{
-                if self.row >= VGA_BUFFER_HEIGHT || self.column >= VGA_BUFFER_WIDTH {
+                
                     self.new_line();
-                }
+                
                 
             },
             _ =>{
