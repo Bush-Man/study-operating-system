@@ -27,10 +27,16 @@ pub extern "C" fn kernel_main(multiboot_magic: u32, multiboot_info_ptr: &Multibo
     }
 
     let mut vga_writer = VgaWriter::new();
+    let (flags,count) = multiboot_info_ptr.enabled_flags();
     
     // write!(vga_writer, "{:#x} Magic Number\n", multiboot_magic).unwrap();
     // write!(vga_writer, "{:?} Multiboot Info Address\n", multiboot_info_ptr).unwrap();
-    print!("Hello, {}!\n", WORLD);
-    
+    // print!("Hello, {}!\n", WORLD);
+    // println!("Hello, {:?}!", multiboot_info_ptr);
+    for i in 0..count{
+        if let Some(flag) = flags[i]{
+            write!(vga_writer, "{:?} Flag\n", flag).unwrap();
+        }
+    }
     loop {}
 }
